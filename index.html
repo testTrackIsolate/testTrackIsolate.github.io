@@ -1,0 +1,80 @@
+<html><head><title></title>
+<link rel="stylesheet" type="text/css"  href="css/main.css" />
+</head><body>
+<header><p><div id="crown"></div><span>&nbsp;&nbsp;GOV.UK</span></p>
+	<div id="yellow-bar">&nbsp;</div>
+<p><span class="subtitle bold">Coronavirus(COVID-19)</span><span class="subtitle normal">&nbsp;&nbsp;|&nbsp;&nbsp;Track and trace</span></p>
+</header>
+<div id="frame1" class="frame selected">
+<div><p>Welcome to the Government's new Track and Trace Ap.</p><p class="body">First, we need to ask you a few questions.</p></p></div>
+<a href='#'">Continue</a>
+</div>
+<div id="frame2" class="frame">
+<div><p>Can you see a castle in this picture?</p></div>
+<div id="castle"><img src="assets/images/barnardCastle.jpg"></div>
+<span class="buttons">
+<a href='#'>Yes</a>
+<a href='#'>No</a>
+</span>
+</div>
+<div id="frame3" class="frame">
+<div><p>Have you been to the Isle of Wight?</p>
+<p class="body">Answer <span class="emphasis">yes</span> to this question if you have been there for any reason. For example:<ul><li>you were there on a <span class="emphasis">school trip</span> when you were 15 and managed to buy some vodka, then broke into a crazy golf;</li><li>you ran away from home to see <span class="emphasis">Clapton and Dylan</span> play in the 60s;</li><li>you may have gone a couple of weeks ago to have a <span class="emphasis">barbecue with an MP</span> during lockdown.</li></ul></p>
+<span class="buttons">
+<a href='#'>Yes</a>
+<a href='#'>No</a>
+</span>
+</div>
+</div>
+<div  id="frame4" class="frame">
+<p>Which of these symptoms do you have?</p>
+<div class="vertical-buttons">
+	<a href='#'>A new, persistent cough</a><br>
+	<a href='#'>A fever</a><br>
+	<a href="#">In "Good Spirits"</a><br>
+	<a href='#'>A sense of bewilderment</a><br>
+	<a href='#'>Rising, boiling anger</a><br>
+	<a href='#'>Grief, frustration and disbelief</a>
+</div>
+</div>
+<div id="frame5" class="frame">
+<div><p>We're nearly ready to start tracking your contacts. First, we need to know whether we can send this man your personal details?</p><p class="body">(Don't worry, we will keep hold of all your data and we won't destroy it.)</p></div>
+<div id="domcum"><img src="assets/images/domcum.png"/></div>
+<span class="buttons"><a>Yes</a></span>
+</div>
+<div id="frame6" class="frame">
+<p>Which of these countries is bigger?</p>
+<div class="vertical-buttons">
+	<a href='#'>Belgium</a><br>
+	<a href='#'>The United Kingdom (England)</a>
+</div>
+</div>
+<div id="frame7" class="frame">
+<p class="body"><span class="emphasis">Don't</span> compare us with other countries. Remember not to try to work out whether 50,000 is a bigger number than 20,000, either. It's too soon to be sure.</p>
+<p>Which of the following jokes has reassured you most?</p>
+<p class="body">Try to remember that the Prime Minister is having a very difficult time. The Leader of the Opposition is hardly helping either, insisting in getting questions answered on the record instead of doing everything over the telephone.</p>
+<div class="vertical-buttons">
+<a href='#'>Whack-a-Mole</a><br>
+<a href='#'>Take it on the chin</a><br>
+<a href='#'>Operation Last Gasp</a>
+</div>
+</div>
+<div id="frame8" class="frame">
+<p>Oh, shit, I forgot to get you to turn Bluetooth on. Sorry. Anyway, you'll probably be fine. Or get it, which is cool too. Good luck.</p>
+<p class="body">(Honestly, why did it have to be our turn when this happened? You'd already had a tory government for ten years, for God's sake! We'd run down absolutely everything, diverting profits to our backers, and judging it just right so that in 2024 we could hand over to Labour a <span class="emphasis">broken husk</span> of a country and let them take the blame for ruining it as they start to undo our damage, so we could step back in.</p><p class="body">But this is harrowing stuff. We wouldn't be human if we weren't in denial about destroying the UK's capacity to cope with a pandemic, and just being too generally useless to protect care home residents or control the spread of disease.</p><p class="body">Yet somehow, we're still just about getting away with it. We'll blame the scientists, we'll blame Labour if we possibly can, and in the end, <span class="emphasis">we'll blame you</span>.)</p>
+</div>
+<div id="footer"><div id="copy">Ehm, any chance you're an app developer? Please give Dom a call. If you're the right person for the job, you'll know how, you freak.</div><img src="assets/images/coa.png"></img></div>
+<script type="text/javascript">
+var currentlySelectedElement = 1;
+function advance(){
+	document.getElementById(`frame${currentlySelectedElement}`).classList.remove("selected");
+	currentlySelectedElement++;
+	document.getElementById(`frame${currentlySelectedElement}`).classList.add("selected");
+}
+var anchors = document.getElementsByTagName("a");
+for (var i = 0; i < anchors.length; i++) { 
+	anchors[i].onclick = advance;
+}
+</script>
+</body>
+</html>
