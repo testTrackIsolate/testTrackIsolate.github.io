@@ -63,7 +63,7 @@ header>div#yellow-bar{
 	background-color:#fff400;
 	width:100%
 }
-a:not(.twitter-share-button){
+a.green{
 	background-color: #00703c;
 	color:#fff;
 	font-family: "nta", Arial, sans-serif;
@@ -80,7 +80,9 @@ a:not(.twitter-share-button){
 	user-select: none;
 	cursor:pointer;
 }
-a:hover:not(.twitter-share-button){background-color:#005a30}
+a.green:hover{
+	background-color:#005a30
+}
 a.twitter{
 	display:none;
 	margin:0px;
