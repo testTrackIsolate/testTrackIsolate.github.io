@@ -135,6 +135,7 @@ div>p{
 div>p.body{
 	font-size:17px;
 	font-weight:normal;
+	margin-bottom:7px;
 }
 div#castle>img{
     filter:blur(20px);
