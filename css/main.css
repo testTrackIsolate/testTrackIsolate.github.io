@@ -63,7 +63,7 @@ header>div#yellow-bar{
 	background-color:#fff400;
 	width:100%
 }
-a{
+a:not(.twitter-share-button){
 	background-color: #00703c;
 	color:#fff;
 	font-family: "nta", Arial, sans-serif;
@@ -80,10 +80,11 @@ a{
 	user-select: none;
 	cursor:pointer;
 }
-a:hover{background-color:#005a30}
+a:hover:not(.twitter-share-button){background-color:#005a30}
 a.twitter{
 	display:none;
-	margin-left:0px;
+	margin:0px;
+	margin-bottom:5px;
 	padding: 0px;
 	background:none;
 	color:#11e;
@@ -100,6 +101,9 @@ span.buttons{
 	display:inline-block;
 	width:100%;
 	text-align: center;
+}
+span.sm-buttons{
+	vertical-align: baseline;
 }
 div.vertical-buttons{
 
