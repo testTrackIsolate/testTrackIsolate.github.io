@@ -120,8 +120,11 @@ div.frame{
 	max-width:600px;
 	overflow:scroll;
 }
-div.frame.selected,a.selected{
+div.frame.selected{
 	display:block;
+}
+a.selected{
+	display:inline-block;	
 }
 div>p{
 	padding-top:30px;
