@@ -63,7 +63,7 @@ header>div#yellow-bar{
 	background-color:#fff400;
 	width:100%
 }
-a:not(.twitter-share-button,.fb-share-button){
+a:not(.twitter-share-button):not(.fb-share-button){
 	background-color: #00703c;
 	color:#fff;
 	font-family: "nta", Arial, sans-serif;
@@ -80,7 +80,7 @@ a:not(.twitter-share-button,.fb-share-button){
 	user-select: none;
 	cursor:pointer;
 }
-a:hover:not(.twitter-share-button,.fb-share-button){background-color:#005a30}
+a:hover:not(.twitter-share-button):not(.fb-share-button){background-color:#005a30}
 a.twitter{
 	display:none;
 	margin:0px;
