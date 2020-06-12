@@ -80,12 +80,16 @@ a{
 	user-select: none;
 	cursor:pointer;
 }
+a:hover{background-color:#005a30}
 a.twitter{
 	background:none;
 	color:#11e;
 	border:none;
 	font-size:x-small;
 	text-align: left;
+}
+a.twitter:hover{
+	background-color:#add8e6
 }
 span.buttons{
 	padding-top:50px;
@@ -105,7 +109,6 @@ span.emphasis{
 	text-decoration:underline;
 	font-weight:bold;
 }
-a:hover{background-color:#005a30}
 div.frame{
 	position:absolute;
 	top:110px;
