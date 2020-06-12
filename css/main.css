@@ -82,6 +82,9 @@ a{
 }
 a:hover{background-color:#005a30}
 a.twitter{
+	display:none;
+	margin-left:0px;
+	padding: 0px;
 	background:none;
 	color:#11e;
 	border:none;
@@ -117,7 +120,7 @@ div.frame{
 	max-width:600px;
 	overflow:scroll;
 }
-div.frame.selected{
+div.frame.selected,a.selected{
 	display:block;
 }
 div>p{
