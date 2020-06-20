@@ -124,7 +124,7 @@ div.frame{
 	bottom:112px;
 	display:none;
 	max-width:600px;
-	overflow:scroll;
+	overflow:auto;
 }
 div.frame.selected{
 	display:block;
