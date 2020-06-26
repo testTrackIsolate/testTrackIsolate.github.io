@@ -21,6 +21,17 @@ p{
 	margin-left:30px;
 	font-weight:normal;
 }
+span.appAd{
+	float:right;
+	font-size:10px;
+	color:#fff;
+}
+span.appAd a{
+	color:#fff;
+}
+span.appAd a:visited{
+	color:#fff;
+}
 ul{
 	font-weight:normal;
 }
@@ -124,7 +135,7 @@ div.frame{
 	bottom:112px;
 	display:none;
 	max-width:600px;
-	overflow:auto;
+	overflow:scroll;
 }
 div.frame.selected{
 	display:block;
