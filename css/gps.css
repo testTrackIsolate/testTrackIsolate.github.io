@@ -133,6 +133,7 @@ div.vertical-buttons>a{
 }
 div.columns{
 	column-count:2;
+	column-width:0px;
 }
 span.emphasis{
 	text-decoration:underline;
