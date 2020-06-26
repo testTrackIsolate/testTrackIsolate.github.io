@@ -290,7 +290,6 @@ div#footer{
   	font-size: 12px;
 	font-weight:200;
 }
-span.smallPrint{font-size:12px};
 div#footer>div#copy{
 	float:left;
 	width:60%;
@@ -300,3 +299,4 @@ div#footer>img{
 	float:right;
 	width:120px;
 }
+span.smallPrint{font-size:12px};
