@@ -53,12 +53,12 @@
 <p>Please choose a measuring system:</p>
 <div class="vertical-buttons">
 	<a class="green" href='#'>Fridges, beds, toaster-widths etc.</a><br>
-	<a class="green" href='#'>Imperial (UK)</a><br>
+	<a class="green" href='#'>Imperial</a><br>
 	<a class="grey">Metric</a>
 </div>
 </div>
 <div id="frame7" class="frame">
-<div><p>You are:</p><ul><li><span class="emphasis">17 miles</span> from where you started</li><br><li><span class="emphasis">18 leagues, 14 furlongs eight chains and a yard</span> from your destination.</li><br><li>about <span class="emphasis">ye-high</span> above sea-level.<span class="smallPrint">&nbsp;(If the tide's out)</span></li></ul><p>(Quietly make a U-turn whenever possible.)</p></div>
+<div><p>You are:</p><ul><li><span class="emphasis">17 miles</span> from where you started</li><br><li><span class="emphasis">18 leagues, 14 furlongs eight chains and a yard</span> from your destination.</li><br><li>about <span class="emphasis">ye-high</span> above sea-level.<span class="smallPrint">&nbsp;(If the tide's out)</span></li></ul><p>(Quietly make a U-turn whenever possible.)</p><p>You can now close this app.</p></div>
 </div>
 <div id="infoBox" class = "lock">
 <p>Locating satellites...</p>
@@ -115,7 +115,7 @@ function advance(){
 	document.getElementById(`frame${currentlySelectedElement}`).classList.remove("selected");
 	currentlySelectedElement++;
 	document.getElementById(`frame${currentlySelectedElement}`).classList.add("selected");
-	if(currentlySelectedElement>7){
+	if(currentlySelectedElement>6){
 		document.getElementById("twitter").classList.add("selected");										    
 	}
 }
