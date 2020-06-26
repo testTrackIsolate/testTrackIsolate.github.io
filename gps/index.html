@@ -127,7 +127,7 @@ var scrollDiv = document.getElementById("infoBox");
 var waitButton = document.getElementById("waitButton");
 var continueButton = document.getElementById("continueButton");
 var scrollDiv = document.getElementById("infoBox");
-setInterval(function(){
+var scrollId = setInterval(function(){
 	scrollDiv.scrollTop = scrollDiv.scrollHeight;
 },100);
 setInterval(function(){
@@ -136,6 +136,7 @@ setInterval(function(){
 },13000)
 setInterval(function(){
 	scrollDiv.classList.remove("lock");
+	clearInterval(scrollId);
 },104000)
 var element = document.getElementById("yourDivID");
 element.scrollTop = element.scrollHeight;
