@@ -1,0 +1,302 @@
+@keyframes changeBlur {
+  from {
+    filter: blur(10px);
+  }
+
+  to {
+    filter:blur(5px);
+  }
+}
+body{
+	user-select: none;
+	padding:0px;
+	margin:0px;
+	    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+}
+p{
+	padding:0;
+	margin:10px;
+	margin-left:30px;
+	font-weight:normal;
+}
+ul{
+	font-weight:normal;
+}
+div#crown{
+	display:inline-block;
+	background-image:url("../assets/images/crown.png");
+	background-size: cover;
+	background-repeat: none;
+	width:30px;
+	height:29px;
+	margin-left:30px;
+}
+header{
+	position:fixed;
+	display: block;
+	width:100%;
+	white-space: nowrap;
+	height:111px;
+	padding-top:3px;
+	padding-bottom:8px;
+	background-color: #000;
+	color:#fff;
+	font: bold 30px "GDS Transport", nta, Arial, sans-serif;
+	overflow:hidden;
+}
+header span.subtitle{
+	font-family: "nta", Arial, sans-serif;
+	font-size: 19px;
+    line-height: 1.3;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+span.normal{
+	font-weight: normal;
+}span.bold{
+	font-weight:bold;
+}
+header>div#yellow-bar{
+	font-size:10px;
+	background-color:#fff400;
+	width:100%
+}
+a.green, a.grey{
+	white-space: nowrap;
+	background-color: #00703c;
+	color:#fff;
+	font-family: "nta", Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+	font-size: 19px;
+	font-weight:400;
+	line-height: 1;
+	text-decoration: none;
+	padding:10px;
+	margin:50px;
+	margin-top:20px;
+	border-bottom: solid #000 2px;
+	user-select: none;
+	cursor:pointer;
+}
+a.grey{
+	background-color: #aaa;
+	pointer-events: none;
+}
+a.green:hover{
+	background-color:#005a30
+}
+a.twitter{
+	display:none;
+	margin:0px;
+	margin-bottom:5px;
+	padding: 0px;
+	background:none;
+	color:#11e;
+	border:none;
+	font-size:x-small;
+	text-align: left;
+}
+a.twitter:hover{
+	background-color:#add8e6
+}
+span.buttons{
+	padding-top:50px;
+	padding-left: 0px;
+	display:inline-block;
+	width:100%;
+	text-align: center;
+}
+span.sm-buttons{
+	vertical-align: baseline;
+}
+div.vertical-buttons{
+
+}
+div.vertical-buttons>a{
+	text-align:left;
+	line-height: 50px;
+}
+div.columns{
+	column-count:2;
+}
+span.emphasis{
+	text-decoration:underline;
+	font-weight:bold;
+}
+div.frame{
+	position:absolute;
+	top:110px;
+	bottom:250px;
+	display:none;
+	max-width:800px;
+	overflow:scroll;
+}
+div.frame.selected{
+	display:block;
+}
+a.selected{
+	display:inline-block;	
+}
+div>p{
+	padding-top:30px;
+	padding-left: 5px;
+	font-size:27px;
+	font-weight:bold;
+}
+div>p.body{
+	font-size:17px;
+	font-weight:normal;
+	margin-bottom:7px;
+	padding-top:22px;
+}
+a#map{
+    cursor:crosshair;
+    }
+a#map>img{
+	width:500px;
+}
+/*
+div#domcum>img{
+	display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}*/
+a.hidden{
+	display:none;
+}
+div#infoBox{
+	position: fixed;
+	width:100%;
+	height:120px;
+	bottom:120px;
+	background-color: black;
+	border: solid 1px #777;
+	border-top-width: 0px;
+	overflow:auto;
+	color:#0e0;
+	font-family: Courier New, monospace;
+	cursor:progress;
+}
+div#infoBox.lock{
+	pointer-events: none;
+}
+div#infoBox::before{
+	font-family: Courier New, monospace;
+	display: block;
+	position:sticky;
+	top:0px;
+	height:20px;
+	font-weight: normal;
+	background-color:#777;
+	content:"Development trace - remove before showing Dom";
+	color:#fff;
+	user-select:none;
+	cursor:progress;
+}
+div#infoBox p::after{
+	white-space: pre;
+	content:"\A";
+}
+div#infoBox p::before{
+	content:"> ";
+}
+div#infoBox p:not(.inputLine){
+	font-size:18px;
+	overflow: hidden;
+	width:0%;
+	animation: type 4s steps(60, end) forwards;
+	white-space: nowrap;
+	margin:0px;
+	padding:0px;
+	height:0px;
+}
+div#infoBox p.inputLine{
+	margin:0px;
+	padding:0px;
+	font-size:18px;
+	animation: blink 0.8s infinite;
+	}
+@keyframes type{ 
+	0%{
+	height:20px;
+	display:inline;
+	}
+  100% {
+  	height:20px;
+  	display:inline;
+    width: 100%;
+  }
+}
+@keyframes blink{ 
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+div#infoBox p:nth-child(1) {animation-delay: 1s;}
+div#infoBox p:nth-child(2) {animation-delay: 5s;}
+div#infoBox p:nth-child(3) {animation-delay: 7s;}
+div#infoBox p:nth-child(4) {animation-delay: 9s;}
+div#infoBox p:nth-child(5) {animation-delay: 11s;}
+div#infoBox p:nth-child(6) {animation-delay: 13s;}
+div#infoBox p:nth-child(7) {animation-delay: 16s;}
+div#infoBox p:nth-child(8) {animation-delay: 19s;}
+div#infoBox p:nth-child(9) {animation-delay: 21s;}
+div#infoBox p:nth-child(10) {animation-delay: 24s;}
+div#infoBox p:nth-child(11) {animation-delay: 27s;}
+div#infoBox p:nth-child(12) {animation-delay: 30s;}
+div#infoBox p:nth-child(13) {animation-delay: 33s;}
+div#infoBox p:nth-child(14) {animation-delay: 36s;}
+div#infoBox p:nth-child(15) {animation-delay: 39s;}
+div#infoBox p:nth-child(16) {animation-delay: 42s;}
+div#infoBox p:nth-child(17) {animation-delay: 45s;}
+div#infoBox p:nth-child(18) {animation-delay: 48s;}
+div#infoBox p:nth-child(19) {animation-delay: 51s;}
+div#infoBox p:nth-child(20) {animation-delay: 54s;}
+div#infoBox p:nth-child(21) {animation-delay: 57s;}
+div#infoBox p:nth-child(22) {animation-delay: 60s;}
+div#infoBox p:nth-child(23) {animation-delay: 63s;}
+div#infoBox p:nth-child(24) {animation-delay: 66s;}
+div#infoBox p:nth-child(25) {animation-delay: 69s;}
+div#infoBox p:nth-child(26) {animation-delay: 72s;}
+div#infoBox p:nth-child(27) {animation-delay: 75s;}
+div#infoBox p:nth-child(28) {animation-delay: 78s;}
+div#infoBox p:nth-child(29) {animation-delay: 81s;}
+div#infoBox p:nth-child(30) {animation-delay: 84s;}
+div#infoBox p:nth-child(31) {animation-delay: 87s;}
+div#infoBox p:nth-child(32) {animation-delay: 90s;}
+div#infoBox p:nth-child(33) {animation-delay: 93s;}
+div#infoBox p:nth-child(34) {animation-delay: 96s;}
+div#infoBox p:nth-child(35) {animation-delay: 99s;}
+div#infoBox p:nth-child(36) {animation-delay: 102s;}
+/*div#infoBox p:nth-child(37) {animation-delay: 105s;}
+div#infoBox p:nth-child(38) {animation-delay: 108s;}
+div#infoBox p:nth-child(39) {animation-delay: 111s;}*/
+div#footer{
+	height:90px;
+	border-top: solid #888 1px;
+	position: fixed;
+	padding:10px;
+  	left: 0;
+  	bottom: 0;
+  	width: 100%;
+  	font-size: 12px;
+	font-weight:200;
+}
+span.smallPrint{font-size:12px};
+div#footer>div#copy{
+	float:left;
+	width:60%;
+}
+div#footer>img{
+	margin-right:30px;
+	float:right;
+	width:120px;
+}
