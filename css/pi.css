@@ -1,0 +1,219 @@
+@keyframes changeBlur {
+  from {
+    filter: blur(10px);
+  }
+
+  to {
+    filter:blur(5px);
+  }
+}
+body{
+	padding:0px;
+	margin:0px;
+	    font-family: "nta", Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+}
+p{
+	padding:0;
+	margin:10px;
+	margin-left:0px;
+	font-weight:normal;
+}
+span.appAd{
+	float:right;
+	font-size:10px;
+	color:#fff;
+}
+span.appAd a{
+	color:#fff;
+}
+span.appAd a:visited{
+	color:#fff;
+}
+ul{
+	font-weight:normal;
+}
+div#crown{
+	display:inline-block;
+	background-image:url("../assets/images/crown.png");
+	background-size: cover;
+	background-repeat: none;
+	width:30px;
+	height:29px;
+	margin-left:30px;
+}
+header{
+	position:fixed;
+	display: block;
+	width:100%;
+	white-space: nowrap;
+	height:260px;
+	padding-top:3px;
+	padding-bottom:8px;
+	background-color: #000;
+	color:#fff;
+	font: bold 30px "GDS Transport", nta, Arial, sans-serif;
+	overflow:hidden;
+}
+
+div.landing-page__header {
+	position:absolute;
+	display: block;
+	width:100%;
+	top:111px;
+    padding-bottom: 30px;
+    padding-top: 15px;
+    margin-bottom: 30px;
+    background-color: #182D4E;
+    color: #ffffff;
+    border-top: solid 1px #fff;
+}
+div.landing-page__header>h1{
+	font-size:36px;
+	margin-left:20px;
+}
+div.landing-page__header>span.subtitle{
+	font-weight: normal;
+	margin-left: 20px;
+	}
+header span.subtitle{
+	font-family: "nta", Arial, sans-serif;
+	font-size: 19px;
+    line-height: 1.3;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+span.normal{
+	font-weight: normal;
+}span.bold{
+	font-weight:bold;
+}
+header>div#yellow-bar{
+	font-size:10px;
+	background-color:#fff400;
+	width:100%
+}
+a.green{
+	background-color: #00703c;
+	color:#fff;
+	font-family: "nta", Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+	font-size: 19px;
+	font-weight:400;
+	line-height: 1;
+	text-decoration: none;
+	padding:10px;
+	margin:50px;
+	margin-top:20px;
+	border-bottom: solid #000 2px;
+	user-select: none;
+	cursor:pointer;
+}
+a.green:hover{
+	background-color:#005a30
+}
+a.twitter{
+	display:none;
+	margin:0px;
+	margin-bottom:5px;
+	padding: 0px;
+	background:none;
+	color:#11e;
+	border:none;
+	font-size:x-small;
+	text-align: left;
+}
+a.twitter:hover{
+	background-color:#add8e6
+}
+span.buttons{
+	padding-top:50px;
+	padding-left: 0px;
+	display:inline-block;
+	width:100%;
+	text-align: center;
+}
+span.sm-buttons{
+	vertical-align: baseline;
+}
+div.vertical-buttons{
+
+}
+div.vertical-buttons>a{
+	text-align:left;
+	line-height: 50px;
+}
+span.emphasis{
+	text-decoration:underline;
+	font-weight:bold;
+}
+div.frame{
+	position:absolute;
+	top:270px;
+	bottom:112px;
+	display:none;
+	max-width:600px;
+	overflow:scroll;
+	padding:20px;
+}
+div.frame.selected{
+	display:block;
+}
+a.selected{
+	display:inline-block;	
+}
+div>p{
+	padding-top:30px;
+	padding-left: 5px;
+	font-size:27px;
+	font-weight:bold;
+}
+div>p.body{
+	font-size:17px;
+	font-weight:normal;
+	margin-bottom:7px;
+	padding-top:22px;
+}
+div#castle>img{
+    filter:blur(20px);
+    width:100%;
+    /**/
+    animation-duration: 1.5s;
+  	animation-name: changeBlur;
+ 	 animation-iteration-count: infinite;
+ 	 animation-direction: alternate;
+}
+div#domcum{
+	padding-top:20px;
+	width:100%;
+
+}
+div#domcum>img{
+	display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+div#footer{
+	height:90px;
+	border-top: solid #888 1px;
+	position: fixed;
+	padding:10px;
+  	left: 0;
+  	bottom: 0;
+  	width: 100%;
+  	font-size: 12px;
+	font-weight:200;
+}
+div#footer>div#copy{
+	float:left;
+	width:60%;
+}
+div#footer>img{
+	margin-right:30px;
+	float:right;
+	width:120px;
+}
