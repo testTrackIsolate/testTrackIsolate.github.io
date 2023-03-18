@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Map</title>
+    <style>
+        #maze {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .room {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 150px;
+            border: 1px solid #000;
+            box-sizing: border-box;
+        }
+        .room-name {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-weight: bold;
+        }
+        .monster, .item {
+            max-height: 50px;
+        }
+        .north {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-top: 1px solid #000;
+            width: 50px;
+        }
+        .south {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom: 1px solid #000;
+            width: 50px;
+        }
+        .east {
+            position: absolute;
+            top: 50%;
+            right: -10px;
+            transform: translateY(-50%);
+            border-right: 1px solid #000;
+            height: 50px;
+        }
+        .west {
+            position: absolute;
+            top: 50%;
+            left: -10px;
+            transform: translateY(-50%);
+            border-left: 1px solid #000;
+            height: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="maze"></div>
+    <script>
+        function createRoomElement(room) {
+            const roomElement = document.createElement("div");
+            roomElement.classList.add("room");
+
+            // Set room background if picture is available
+            const picture = room.getElementsByTagName("picture")[0];
+            if (picture) {
+                roomElement.style.backgroundImage = `url(${picture.textContent})`;
+            }
+
+            // Room name
+            const roomName = document.createElement("span");
+            roomName.classList.add("room-name");
+            roomName.textContent = room.getElementsByTagName("name")[0].textContent;
+            roomElement.appendChild(roomName);
+
+            // Monsters
+            const monsters = room.getElementsByTagName("monster");
+            for (let monster of monsters) {
+                const monsterPicture = monster.getElementsByTagName("picture")[0];
+                if (monsterPicture) {
+                    const monsterImg = document.createElement("img");
+                    monsterImg.classList.add("monster");
+                    monsterImg.src = monsterPicture.textContent;
+                    roomElement.appendChild(monsterImg);
+                }
+            }
+
+            // Items
+            const items = room.getElementsByTagName("item");
+            for (let item of items) {
+                const itemPicture = item.getElementsByTagName("picture")[0];
+                if (itemPicture) {
+                    const itemImg = document.createElement("img");
+                    itemImg.classList.add("item");
+                    itemImg.src = itemPicture.textContent;
+                    roomElement.appendChild(itemImg);
+                }
+            }
+
+            // Connections
+            const connections = room.getElementsByTagName("connections")[0];
+            if (connections) {
+            const northRoomID = connections.getElementsByTagName("north")[0]?.getAttribute("roomID");
+            if (northRoomID) {
+                const northElement = document.createElement("div");
+                northElement.classList.add("north");
+                roomElement.appendChild(northElement);
+            }
+            
+            const southRoomID = connections.getElementsByTagName("south")[0]?.getAttribute("roomID");
+            if (southRoomID) {
+                const southElement = document.createElement("div");
+                southElement.classList.add("south");
+                roomElement.appendChild(southElement);
+            }
+
+            const eastRoomID = connections.getElementsByTagName("east")[0]?.getAttribute("roomID");
+            if (eastRoomID) {
+                const eastElement = document.createElement("div");
+                eastElement.classList.add("east");
+                roomElement.appendChild(eastElement);
+            }
+
+            const westRoomID = connections.getElementsByTagName("west")[0]?.getAttribute("roomID");
+            if (westRoomID) {
+                const westElement = document.createElement("div");
+                westElement.classList.add("west");
+                roomElement.appendChild(westElement);
+            }
+        }
+
+        return roomElement;
+    }
+
+    function createMaze(xml) {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xml, "application/xml");
+        const rooms = xmlDoc.getElementsByTagName("room");
+
+        const maze = document.getElementById("maze");
+        for (let room of rooms) {
+            const roomElement = createRoomElement(room);
+            const coordinates = room.getElementsByTagName("coordinates")[0];
+            const x = coordinates.getAttribute("x");
+            const y = coordinates.getAttribute("y");
+            maze.appendChild(roomElement);
+            roomElement.style.gridColumn = `${Number(x) + 1} / span 1`;
+            roomElement.style.gridRow = `${Number(y) + 1} / span 1`;
+        }
+    }
+
+    // Load maze XML file and create the maze
+    const xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            createMaze(this.responseText);
+        }
+    };
+    xmlhttp.open("GET", "maze_gpt4.xml", true);
+    xmlhttp.send();
+</script>
+</body>
+</html>

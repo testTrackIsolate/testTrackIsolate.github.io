@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maze Adventure</title>
+    <style>
+    body {
+        font-family: "Arial", sans-serif;
+        background-color: #222;
+        color: #f1f1f1;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-image: url("dungeonTexture28x28.png");
+    }
+
+    h1, h2, h3 {
+        color: #ffcc00;
+    }
+
+    #game-container {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        grid-gap: 20px;
+    }
+
+    #room-display, #inventory-display {
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 20px;
+        border-radius: 5px;
+    }
+
+    #actions {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    button {
+        background-color: #007acc;
+        color: #f1f1f1;
+        border: none;
+        border-radius: 3px;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    button:disabled {
+        background-color: #444;
+        cursor: not-allowed;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 5px;
+    }
+</style>
+
+</head>
+<body>
+    <h1>Maze Adventure</h1>
+    <div id="room-description"></div>
+    <div id="room-items"></div>
+    <div id="room-monsters"></div>
+    <div id="navigation">
+        <button onclick="move('north')">North</button>
+        <button onclick="move('south')">South</button>
+        <button onclick="move('east')">East</button>
+        <button onclick="move('west')">West</button>
+    </div>
+    <div id="actions">
+    <h2>Actions:</h2>
+    <button id="pickup-item" onclick="pickupItem()" disabled>Pick up item</button>
+    <button id="drop-item" onclick="dropItem()" disabled>Drop item</button>
+    <button id="use-item" onclick="useItem()" disabled>Use item</button>
+    <button id="speak-monster" onclick="speakWithMonster()" disabled>Speak with monster</button>
+    <button id="fight-monster" onclick="fightMonster()" disabled>Fight monster</button>
+    </div>
+
+    <div id="inventory">
+        <h2>Inventory:</h2>
+        <ul id="inventory-list"></ul>
+    </div>
+    <script>
+        let mazeXML = "";
+
+fetch('maze_gpt4.xml')
+    .then(response => response.text())
+    .then(data => {
+        mazeXML = data;
+        initGame();
+    });
+    let parser = new DOMParser();
+    //let xmlDoc = parser.parseFromString(mazeXML, "text/xml");//BUG - GPT4 tried to parse the doc before it's ready.
+    let xmlDoc = null;//BUGFIX minimal fix of GPT4's bug - will move initialisation into the function.
+
+// Game state
+let currentRoom = null;
+let inventory = [];
+
+// Parse XML and initialize game state
+let rooms = [];
+
+function initGame() {
+    xmlDoc = parser.parseFromString(mazeXML, "text/xml");//BUGFIX minimal fix of GPT4's bug - move initialisation into the function.
+    // Parse rooms
+    let xmlRooms = xmlDoc.getElementsByTagName("room");
+    for (let i = 0; i < xmlRooms.length; i++) {
+        let room = parseRoom(xmlRooms[i]);
+        rooms.push(room);
+    }
+
+    // Set the initial room
+    currentRoom = getRoomById(1);
+    updateRoomDisplay();
+}
+
+function parseRoom(xmlRoom) {
+    let room = {
+        id: parseInt(xmlRoom.getAttribute("id")),
+        name: xmlRoom.getElementsByTagName("name")[0].textContent,
+        description: xmlRoom.getElementsByTagName("description")[0].textContent,
+        coordinates: {
+            x: parseInt(xmlRoom.getElementsByTagName("coordinates")[0].getAttribute("x")),
+            y: parseInt(xmlRoom.getElementsByTagName("coordinates")[0].getAttribute("y")),
+        },
+        connections: parseConnections(xmlRoom.getElementsByTagName("connections")[0]),
+        items: parseItems(xmlRoom.getElementsByTagName("items")[0]),
+        monsters: parseMonsters(xmlRoom.getElementsByTagName("monsters")[0]),
+    };
+
+    return room;
+}
+
+function parseConnections(xmlConnections) {
+    let connections = {};
+
+    let directions = ['north', 'south', 'east', 'west'];
+    for (let direction of directions) {
+        let connection = xmlConnections.getElementsByTagName(direction)[0];
+        if (connection) {
+            connections[direction] = parseInt(connection.getAttribute("roomID"));
+        }
+    }
+
+    return connections;
+}
+
+function parseItems(xmlItems) {
+    let items = [];
+    let xmlItemList = xmlItems.getElementsByTagName("item");
+
+    for (let i = 0; i < xmlItemList.length; i++) {
+        let item = {
+            id: parseInt(xmlItemList[i].getAttribute("id")),
+            name: xmlItemList[i].getElementsByTagName("name")[0].textContent,
+            description: xmlItemList[i].getElementsByTagName("description")[0].textContent,
+            action: parseAction(xmlItemList[i].getElementsByTagName("action")[0]),
+        };
+        items.push(item);
+    }
+
+    return items;
+}
+
+function parseAction(xmlAction) {
+    let action = {
+        type: xmlAction.getElementsByTagName("type")[0].textContent,
+        effect: xmlAction.getElementsByTagName("effect")[0].textContent,
+    };
+
+    return action;
+}
+
+function parseMonsters(xmlMonsters) {
+    let monsters = [];
+    let xmlMonsterList = xmlMonsters.getElementsByTagName("monster");
+
+    for (let i = 0; i < xmlMonsterList.length; i++) {
+        let monster = {
+            id: parseInt(xmlMonsterList[i].getAttribute("id")),
+            name: xmlMonsterList[i].getElementsByTagName("name")[0].textContent,
+            description: xmlMonsterList[i].getElementsByTagName("description")[0].textContent,
+            health: parseInt(xmlMonsterList[i].getElementsByTagName("health")[0].textContent),
+            attack: parseInt(xmlMonsterList[i].getElementsByTagName("attack")[0].textContent),
+            defense: parseInt(xmlMonsterList[i].getElementsByTagName("defense")[0].textContent),
+            questions: parseQuestions(xmlMonsterList[i].getElementsByTagName("questions")[0]),
+        };
+        monsters.push(monster);
+    }
+
+    return monsters;
+}
+
+function parseQuestions(xmlQuestions) {
+    let questions = [];
+    let xmlQuestionList = xmlQuestions.getElementsByTagName("question");
+
+    for (let i = 0; i < xmlQuestionList.length; i++) {
+        let question = {
+            id: parseInt(xmlQuestionList[i].getAttribute("id")),
+            text: xmlQuestionList[i].getElementsByTagName("text")[0].textContent,
+            responseType: xmlQuestionList[i].getElementsByTagName("response")[0].getAttribute("type"),
+        };
+        questions.push(question);
+    }
+
+    return questions;
+}
+
+function getRoomById(id) {
+    return rooms.find(room => room.id === id);
+}
+function move(direction) {
+    if (currentRoom.connections[direction]) {
+        const newRoomId = currentRoom.connections[direction];
+        currentRoom = getRoomById(newRoomId);
+    } else {
+        alert("There's no room in that direction!");
+    }
+
+    updateRoomDisplay();
+}
+
+//DEBUG this is an updated version of this function - the old one worked, but didn't describe available exits.
+function updateRoomDisplay() {
+    // Update room description
+    let description = currentRoom.description;
+
+    // Include available directions
+    let availableDirections = Object.keys(currentRoom.connections)
+        .map(direction => direction.charAt(0).toUpperCase() + direction.slice(1))
+        .join(', ');
+    description += ` You can go ${availableDirections || 'nowhere'} from here.`;
+
+    // Function to add articles to the item/monster names
+    function addArticle(name) {
+        const vowels = ['a', 'e', 'i', 'o', 'u'];
+        const article = vowels.includes(name[0].toLowerCase()) ? 'an' : 'a';
+        return `${article} ${name}`;
+    }
+
+    // Function to join an array of strings with commas and "and"
+    function joinWithCommasAnd(array) {
+        if (array.length === 1) {
+            return array[0];
+        }
+        let last = array.pop();
+        return array.join(', ') + ' and ' + last;
+    }
+
+    // Include room items
+    if (currentRoom.items.length > 0) {
+        let itemNames = currentRoom.items.map(item => addArticle(item.name));
+        let itemList = joinWithCommasAnd(itemNames);
+        description += ` There ${currentRoom.items.length > 1 ? 'are' : 'is'} ${itemList} in the room.`;
+    } else {
+        description += " There are no items in this room.";
+    }
+
+    // Include room monsters
+    if (currentRoom.monsters.length > 0) {
+        let monsterNames = currentRoom.monsters.map(monster => addArticle(monster.name));
+        let monsterList = joinWithCommasAnd(monsterNames);
+        description += ` There ${currentRoom.monsters.length > 1 ? 'are' : 'is'} ${monsterList} in the room.`;
+    } else {
+        description += " There are no monsters in this room.";
+    }
+
+    document.getElementById("room-description").textContent = description;
+
+    // Update action buttons based on the room's state
+    updateActionButtons();
+
+    // Update the displayed inventory
+    updateInventoryDisplay();
+}
+
+
+
+//BUG - GPT4 didn't initially provide the updateActionButtons function, not provide a placeholder. It has provided it on request.
+function updateActionButtons() {
+    //BUG - GPT4 got all the element names wrong here.Minimal fix below.
+    /*let pickupButton = document.getElementById("pickup-button");
+    let dropButton = document.getElementById("drop-button");
+    let useButton = document.getElementById("use-button");
+    let speakButton = document.getElementById("speak-button");
+    let fightButton = document.getElementById("fight-button");
+    */
+    let pickupButton = document.getElementById("pickup-item");
+    let dropButton = document.getElementById("drop-item");
+    let useButton = document.getElementById("use-item");
+    let speakButton = document.getElementById("speak-monster");
+    let fightButton = document.getElementById("fight-monster");
+
+    pickupButton.disabled = currentRoom.items.length === 0;
+    dropButton.disabled = inventory.length === 0;
+    useButton.disabled = inventory.length === 0;
+    speakButton.disabled = currentRoom.monsters.length === 0 || !currentRoom.monsters[0].questions;
+    fightButton.disabled = currentRoom.monsters.length === 0;
+}
+
+function updateInventoryDisplay() {
+    let inventoryList = document.getElementById("inventory-list");
+    inventoryList.innerHTML = "";
+
+    if (inventory.length > 0) {
+        for (let item of inventory) {
+            let listItem = document.createElement("li");
+            listItem.textContent = item.name;
+            inventoryList.appendChild(listItem);
+        }
+    } else {
+        let emptyMessage = document.createElement("li");
+        emptyMessage.textContent = "No items in your inventory.";
+        inventoryList.appendChild(emptyMessage);
+    }
+}
+
+
+function pickupItem() {
+    if (currentRoom.items.length > 0) {
+        let item = currentRoom.items.shift();
+        inventory.push(item);
+        alert(`You picked up the ${item.name}.`);
+    } else {
+        alert("There are no items to pick up.");
+    }
+    updateRoomDisplay();
+}
+
+function dropItem() {
+    if (inventory.length > 0) {
+        let item = inventory.shift();
+        currentRoom.items.push(item);
+        alert(`You dropped the ${item.name}.`);
+    } else {
+        alert("There are no items to drop.");
+    }
+    updateRoomDisplay();
+}
+
+function useItem() {
+    if (inventory.length > 0) {
+        let item = inventory.shift();
+        alert(`You used the ${item.name}. ${item.action.effect}`);
+    } else {
+        alert("There are no items to use.");
+    }
+    updateRoomDisplay();
+}
+
+function speakWithMonster() {
+    if (currentRoom.monsters.length > 0) {
+        let monster = currentRoom.monsters[0];
+        let question = monster.questions[0];
+        let response = prompt(`${monster.name}: ${question.text}`);
+
+        if (response && response.toLowerCase() === question.responseType) {
+            alert(`The ${monster.name} is satisfied with your answer.`);
+        } else {
+            alert(`The ${monster.name} does not like your answer.`);
+        }
+    } else {
+        alert("There are no monsters to speak with.");
+    }
+}
+
+function fightMonster() {
+    if (currentRoom.monsters.length > 0) {
+        let monster = currentRoom.monsters.shift();
+        alert(`You fought and defeated the ${monster.name}.`);
+    } else {
+        alert("There are no monsters to fight.");
+    }
+    updateRoomDisplay();
+}
+
+
+    </script>
+</body>
+</html>

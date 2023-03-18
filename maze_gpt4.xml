@@ -1,0 +1,336 @@
+<maze>
+    <!-- Row 1 -->
+    <room id="1">
+    <name>Forest Clearing</name>
+    <description>A small, quiet clearing in a dense forest with sunlight filtering through the trees.</description>
+    <coordinates x="0" y="0" />
+    <connections>
+        <north roomID="2" />
+        <east roomID="3" />
+    </connections>
+    <items>
+        <item id="1">
+            <name>Wooden Sword</name>
+            <description>A basic wooden sword. Better than nothing!</description>
+            <action>
+                <type>equip</type>
+                <effect>+5 attack</effect>
+            </action>
+        </item>
+        <item id="2">
+            <name>Health Potion</name>
+            <description>A small potion that restores some health.</description>
+            <action>
+                <type>consume</type>
+                <effect>+20 HP</effect>
+            </action>
+        </item>
+    </items>
+    <monsters>
+        <monster id="1">
+            <name>Forest Goblin</name>
+            <description>A small, green goblin that seems more curious than dangerous.</description>
+            <health>10</health>
+            <attack>3</attack>
+            <defense>2</defense>
+            <questions>
+                <question id="1">
+                    <text>What is your name, adventurer?</text>
+                    <response type="input" />
+                </question>
+                <question id="2">
+                    <text>Are you friend or foe?</text>
+                    <response type="choice">
+                        <option value="friend">Friend</option>
+                        <option value="foe">Foe</option>
+                    </response>
+                </question>
+            </questions>
+        </monster>
+    </monsters>
+</room>
+    <room id="2">
+        <name>Shadowy Path</name>
+        <description>A narrow path shaded by the dense forest canopy. It feels eerily quiet here.</description>
+        <coordinates x="0" y="1" />
+        <connections>
+            <south roomID="1" />
+            <east roomID="3" />
+        </connections>
+        <items>
+            <item id="3">
+                <name>Torch</name>
+                <description>A simple wooden torch to light the way.</description>
+                <action>
+                    <type>equip</type>
+                    <effect>+10 visibility</effect>
+                </action>
+            </item>
+        </items>
+        <monsters>
+            <!-- No monsters in this room -->
+        </monsters>
+    </room>
+    <room id="3">
+        <name>Abandoned Campsite</name>
+        <description>The remains of an abandoned campsite. There might still be some useful supplies left behind.</description>
+        <coordinates x="0" y="2" />
+        <connections>
+            <west roomID="2" />
+            <south roomID="6" />
+        </connections>
+        <items>
+            <item id="4">
+                <name>Leather Armor</name>
+                <description>A set of worn leather armor. It offers some protection.</description>
+                <action>
+                    <type>equip</type>
+                    <effect>+10 defense</effect>
+                </action>
+            </item>
+            <item id="5">
+                <name>Flint and Steel</name>
+                <description>A flint and steel set for starting fires.</description>
+                <action>
+                    <type>use</type>
+                    <effect>start_fire</effect>
+                </action>
+            </item>
+        </items>
+        <monsters>
+            <!-- No monsters in this room -->
+        </monsters>
+    </room>
+
+    <!-- Row 2 -->
+    <room id="4">
+        <name>Rickety Bridge</name>
+        <description>A rickety wooden bridge spans a deep chasm. You can hear the wind howling below.</description>
+        <coordinates x="1" y="0" />
+        <connections>
+            <north roomID="1" />
+            <east roomID="5" />
+        </connections>
+        <items>
+            <!-- No items in this room -->
+        </items>
+        <monsters>
+            <monster id="2">
+                <name>Bridge Troll</name>
+                <description>A large, intimidating troll guards the bridge, blocking your path.</description>
+                <health>30</health>
+                <attack>15</attack>
+                <defense>10</defense>
+                <questions>
+                    <question id="3">
+                        <text>What is the airspeed velocity of an unladen swallow?</text>
+                        <response type="input" />
+                    </question>
+                </questions>
+            </monster>
+        </monsters>
+    </room>
+    <room id="5">
+        <name>Spider's Lair</name>
+        <description>A dark, damp room covered in spiderwebs. You can hear the skittering of many legs.</description>
+        <coordinates x="1" y="1" />
+        <connections>
+        <north roomID="2" />
+        <west roomID="4" />
+        <east roomID="6" />
+    </connections>
+    <items>
+        <item id="6">
+            <name>Antidote</name>
+            <description>A vial containing a cure for most common poisons.</description>
+            <action>
+                <type>consume</type>
+                <effect>cure_poison</effect>
+            </action>
+        </item>
+    </items>
+    <monsters>
+        <monster id="3">
+            <name>Giant Spider</name>
+            <description>A huge, venomous spider lurking in the shadows, ready to strike.</description>
+            <health>20</health>
+            <attack>12</attack>
+            <defense>8</defense>
+            <questions>
+                <!-- No questions for this monster -->
+            </questions>
+        </monster>
+    </monsters>
+</room>
+<room id="6">
+    <name>Underground Spring</name>
+    <description>A small underground spring with crystal clear water. A soothing atmosphere surrounds the area.</description>
+    <coordinates x="1" y="2" />
+    <connections>
+        <north roomID="3" />
+        <west roomID="5" />
+        <east roomID="7" />
+    </connections>
+    <items>
+        <item id="7">
+            <name>Water Flask</name>
+            <description>A flask filled with refreshing water from the spring.</description>
+            <action>
+                <type>consume</type>
+                <effect>+10 HP</effect>
+            </action>
+        </item>
+    </items>
+    <monsters>
+        <!-- No monsters in this room -->
+    </monsters>
+</room>
+
+<!-- Row 3 -->
+<room id="7">
+    <name>Dark Tunnel</name>
+    <description>A long, dark tunnel that stretches deep into the earth. The air is stale and heavy.</description>
+    <coordinates x="2" y="0" />
+    <connections>
+        <east roomID="8" />
+    </connections>
+    <items>
+        <!-- No items in this room -->
+    </items>
+    <monsters>
+        <monster id="4">
+            <name>Shadow Bat</name>
+            <description>A bat with dark, shadowy wings that blend into the darkness.</description>
+            <health>15</health>
+            <attack>8</attack>
+            <defense>5</defense>
+            <questions>
+                <!-- No questions for this monster -->
+            </questions>
+        </monster>
+    </monsters>
+</room>
+<room id="8">
+    <name>Rocky Cavern</name>
+    <description>A cavern filled with jagged rocks and dripping stalactites. The ground is uneven and treacherous.</description>
+    <coordinates x="2" y="1" />
+    <connections>
+        <west roomID="7" />
+        <north roomID="5" />
+        <east roomID="9" />
+    </connections>
+    <items>
+        <item id="8">
+            <name>Iron Hammer</name>
+            <description>A heavy iron hammer, useful for smashing through obstacles.</description>
+            <action>
+                <type>equip</type>
+                <effect>+15 attack</effect>
+            </action>
+        </item>
+    </items>
+    <monsters>
+        <!-- No monsters in this room -->
+    </monsters>
+</room>
+<room id="9">
+            <name>Hidden Treasure Room</name>
+        <description>A hidden chamber filled with glittering gold and precious gems. A fortune awaits the brave adventurer.</description>
+        <coordinates x="2" y="2" />
+        <connections>
+            <west roomID="6" />
+            <north roomID="12" />
+        </connections>
+        <items>
+            <item id="9">
+                <name>Golden Key</name>
+                <description>A key made of pure gold. It must unlock something important.</description>
+                <action>
+                    <type>use</type>
+                    <effect>unlock_door</effect>
+                </action>
+            </item>
+            <item id="10">
+                <name>Ruby Amulet</name>
+                <description>A beautiful amulet with a large ruby set in its center. It seems to have magical properties.</description>
+                <action>
+                    <type>equip</type>
+                    <effect>+20 HP, +5 defense</effect>
+                </action>
+            </item>
+        </items>
+        <monsters>
+            <!-- No monsters in this room -->
+        </monsters>
+    </room>
+
+    <!-- Row 4 -->
+    <room id="10">
+        <name>Guarded Gate</name>
+        <description>A massive iron gate guarded by a menacing statue. The way forward is blocked.</description>
+        <coordinates x="3" y="0" />
+        <connections>
+            <north roomID="7" />
+        </connections>
+        <items>
+            <!-- No items in this room -->
+        </items>
+        <monsters>
+            <monster id="5">
+                <name>Stone Golem</name>
+                <description>A towering golem made of stone, guarding the gate with unyielding determination.</description>
+                <health>50</health>
+                <attack>20</attack>
+                <defense>20</defense>
+                <questions>
+                    <question id="4">
+                        <text>Speak the password to pass.</text>
+                        <response type="input" />
+                    </question>
+                </questions>
+            </monster>
+        </monsters>
+    </room>
+    <room id="11">
+        <name>Enchanted Garden</name>
+        <description>A beautiful garden filled with vibrant, magical flowers. A sense of peace and tranquility fills the air.</description>
+        <coordinates x="3" y="1" />
+        <connections>
+            <north roomID="8" />
+        </connections>
+        <items>
+            <item id="11">
+                <name>Healing Herb</name>
+                <description>A rare herb with potent healing properties.</description>
+                <action>
+                    <type>consume</type>
+                    <effect>+50 HP</effect>
+                </action>
+            </item>
+        </items>
+        <monsters>
+            <!-- No monsters in this room -->
+        </monsters>
+    </room>
+    <room id="12">
+        <name>Ancient Throne Room</name>
+        <description>The majestic throne room of a long-forgotten kingdom. The air is thick with history and power.</description>
+        <coordinates x="3" y="2" />
+        <connections>
+            <south roomID="9" />
+        </connections>
+        <items>
+            <item id="12">
+                <name>Crown of the Ancients</name>
+                <description>The crown of an ancient king, adorned with priceless jewels. Wearing it grants immense power.</description>
+                <action>
+                    <type>equip</type>
+                    <effect>+30 HP</effect>
+                </action>
+            </item>
+        </items>
+        <monsters>
+            <!-- No monsters in this room -->
+        </monsters>
+    </room>
+</maze>
