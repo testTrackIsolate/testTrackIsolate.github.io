@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+  <title>Jump the Train Game</title>
+</head>
+<body>
+  <canvas id="gameCanvas" width="800" height="400"></canvas>
+  <script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const stickman = {
+      x: canvas.width - 30,
+      y: canvas.height - 40,
+      width: 10,
+      height: 30,
+      jumping: false,
+      jumpHeight: 100,
+      lives: 3
+    };
+
+    const train = {
+      x: -20,
+      y: canvas.height - 20,
+      width: 20,
+      height: 10,
+      speed: 4,
+      wagons: 0
+    };
+
+    let score = 0;
+    let level = 1;
+
+    function drawStickman() {
+      ctx.beginPath();
+      ctx.rect(stickman.x, stickman.y, stickman.width, stickman.height);
+      ctx.fillStyle = "black";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function drawTrain() {
+      ctx.beginPath();
+      ctx.rect(train.x, train.y, train.width + train.wagons * 20, train.height);
+      ctx.fillStyle = "red";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    function drawLives() {
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "black";
+      ctx.fillText("Lives: " + stickman.lives, 10, 20);
+    }
+
+    function drawScore() {
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "black";
+      ctx.fillText("Score: " + score, canvas.width - 100, 20);
+    }
+
+    function drawLevel() {
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "black";
+      ctx.fillText("Level: " + level, canvas.width / 2, 20);
+    }
+
+    function jump() {
+      if (!stickman.jumping) {
+        stickman.jumping = true;
+        setTimeout(() => {
+          stickman.jumping = false;
+        }, 250); //ChatGPT Set this to 1000, I've reduced it.
+      }
+    }
+
+    function update() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (stickman.jumping && stickman.y > canvas.height - stickman.jumpHeight - 40) {
+        stickman.y -= 10;
+      } else if (stickman.y < canvas.height - 40) {
+        stickman.y += 10;
+      }
+
+      train.x += train.speed;
+      if (train.x > canvas.width) {
+        train.x = -20;
+        score += train.wagons + 1;
+        if (score % 10 === 0) {
+          level++;
+          train.speed += 1;
+          if (train.wagons < 2) {
+            train.wagons++;
+           }
+         }
+       }
+
+  if (
+    stickman.x < train.x + train.width + train.wagons * 20 &&
+    stickman.x + stickman.width > train.x &&
+    stickman.y < train.y + train.height &&
+    stickman.y + stickman.height > train.y
+  ) {
+    train.x = -20;
+    stickman.lives--;
+  }
+
+  drawStickman();
+  drawTrain();
+  drawLives();
+  drawScore();
+  drawLevel();
+
+  if (stickman.lives > 0) {
+    requestAnimationFrame(update);
+  } else {
+    alert("Game Over! Your score is: " + score);
+    location.reload();
+  }
+}
+
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space") {
+    jump();
+  }
+});
+
+update();
+</script>
+</body>
+</html>
