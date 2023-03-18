@@ -87,7 +87,7 @@
         stickman.jumping = true;
         setTimeout(() => {
           stickman.jumping = false;
-        }, 250); //ChatGPT Set this to 1000, I've reduced it.
+        }, 250); //ChatGPT wanted 100, I've changed this.
       }
     }
 
@@ -109,9 +109,9 @@
           train.speed += 1;
           if (train.wagons < 2) {
             train.wagons++;
-           }
-         }
-       }
+      }
+    }
+  }
 
   if (
     stickman.x < train.x + train.width + train.wagons * 20 &&
@@ -141,6 +141,10 @@ document.addEventListener("keydown", (e) => {
   if (e.code === "Space") {
     jump();
   }
+});
+
+canvas.addEventListener("touchstart", () => {
+  jump();
 });
 
 update();
