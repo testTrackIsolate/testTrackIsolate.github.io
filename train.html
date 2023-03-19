@@ -54,6 +54,7 @@ function resizeCanvas() {
   stickman.y = canvas.height - 40;
 
   train.y = canvas.height - 20;
+  train.speed = Math.max(2, canvas.width / 300); // Scale the train's initial speed based on canvas width
 }
 
 resizeCanvas();
@@ -96,27 +97,18 @@ resizeCanvas();
       ctx.fillText("Level: " + level, canvas.width / 2, 20);
     }
 
-    function jump() {
-      if (!stickman.jumping) {
-        stickman.jumping = true;
-        setTimeout(() => {
-          stickman.jumping = false;
-        }, 250); //ChatGPT wanted 100, I've changed this.
-      }
-    }
-    function jump() {
+   function jump() {
   if (!stickman.jumping) {
     stickman.jumping = true;
 
     setTimeout(() => {
       stickman.jumping = false;
-    }, 250); // 1 second for jump duration //ChatGPT wanted 100, I've changed this.
+    }, 250); // 250ms for jump duration
 
     setTimeout(() => {
-      if (stickman.y === canvas.height - 40) {
+      stickman.y = canvas.height - 40;
         stickman.canJump = true;
-      }
-    }, 1500); // 1.5 seconds for cooldown period
+    }, 300); // 300ms for cooldown period
   }
 }
 
@@ -134,7 +126,8 @@ resizeCanvas();
         train.x = -20;
         score += train.wagons + 1;
         if (score > 0 && score % 5 === 0) {
-    if (train.speed < 15) {
+    let maxSpeed = canvas.width / 60;
+    if (train.speed < maxSpeed) {
       train.speed += 1;
     }
     if (train.wagons < Math.floor(train.speed / 2)) {
