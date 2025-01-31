@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SVG Tetris – 8-Bit Edition</title>
+  <style>
+    body {
+      background: #333;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: monospace;
+    }
+    /* Container for the game board and sidebar */
+    #gameContainer {
+      display: flex;
+      gap: 20px;
+    }
+    /* Main Tetris playfield */
+    #tetris {
+      background: #111;
+      border: 2px solid #fff;
+    }
+    /* Sidebar styling */
+    #sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    h3 {
+      margin: 0 0 5px 0;
+      color: #fff;
+      text-align: center;
+    }
+    /* Style for preview SVGs and Kremlin graphic */
+    #nextPieces svg, #kremlin svg {
+      background: #222;
+      border: 1px solid #fff;
+      image-rendering: pixelated;
+      display: block;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameContainer">
+    <!-- Main Tetris playing field (10x20 cells at 30px each) -->
+    <svg id="tetris" width="300" height="600"></svg>
+    
+    <!-- Sidebar containing previews and the Kremlin graphic -->
+    <div id="sidebar">
+      <div id="nextPieces">
+        <h3>Next Pieces</h3>
+        <svg id="preview1" width="120" height="120"></svg>
+        <svg id="preview2" width="120" height="120"></svg>
+      </div>
+      <div id="kremlin">
+        <h3>The Kremlin</h3>
+        <svg id="kremlinGraphic" width="120" height="120">
+          <!-- A very simplified 8-bit–style Kremlin (using blocky shapes) -->
+          <rect x="10" y="60" width="20" height="50" fill="#b22222" stroke="#000" stroke-width="2"></rect>
+          <rect x="40" y="40" width="20" height="70" fill="#8b0000" stroke="#000" stroke-width="2"></rect>
+          <rect x="70" y="60" width="20" height="50" fill="#b22222" stroke="#000" stroke-width="2"></rect>
+          <polygon points="10,60 20,40 30,60" fill="#daa520" stroke="#000" stroke-width="2"></polygon>
+          <polygon points="40,40 50,20 60,40" fill="#daa520" stroke="#000" stroke-width="2"></polygon>
+          <polygon points="70,60 80,40 90,60" fill="#daa520" stroke="#000" stroke-width="2"></polygon>
+          <circle cx="60" cy="15" r="10" fill="#ffd700" stroke="#000" stroke-width="2"></circle>
+        </svg>
+      </div>
+    </div>
+
+  <script>
+    (function() {
+      // Game board settings
+      const cols = 10, rows = 20, cellSize = 30;
+      const board = [];
+      for (let y = 0; y < rows; y++) {
+        board[y] = new Array(cols).fill(null);
+      }
+
+      // Global speed and score counters
+      let dropSpeed = 500; // in ms (will speed up as you clear lines)
+      let linesClearedTotal = 0;
+
+      // Define the 7 tetrominoes (each with one or more rotations)
+      const tetrominoes = [
+        {
+          name: "I",
+          rotations: [
+            [ [0,1], [1,1], [2,1], [3,1] ],
+            [ [2,0], [2,1], [2,2], [2,3] ],
+            [ [0,2], [1,2], [2,2], [3,2] ],
+            [ [1,0], [1,1], [1,2], [1,3] ]
+          ],
+          color: "cyan"
+        },
+        {
+          name: "J",
+          rotations: [
+            [ [0,0], [0,1], [1,1], [2,1] ],
+            [ [1,0], [1,1], [1,2], [0,2] ],
+            [ [0,1], [1,1], [2,1], [2,2] ],
+            [ [1,0], [2,0], [1,1], [1,2] ]
+          ],
+          color: "blue"
+        },
+        {
+          name: "L",
+          rotations: [
+            [ [2,0], [0,1], [1,1], [2,1] ],
+            [ [1,0], [1,1], [1,2], [2,2] ],
+            [ [0,1], [1,1], [2,1], [0,2] ],
+            [ [0,0], [1,0], [1,1], [1,2] ]
+          ],
+          color: "orange"
+        },
+        {
+          name: "O",
+          rotations: [
+            [ [1,0], [2,0], [1,1], [2,1] ]
+          ],
+          color: "yellow"
+        },
+        {
+          name: "S",
+          rotations: [
+            [ [1,1], [2,1], [0,2], [1,2] ],
+            [ [1,0], [1,1], [2,1], [2,2] ],
+            [ [1,1], [2,1], [0,2], [1,2] ],
+            [ [1,0], [1,1], [2,1], [2,2] ]
+          ],
+          color: "green"
+        },
+        {
+          name: "T",
+          rotations: [
+            [ [1,0], [0,1], [1,1], [2,1] ],
+            [ [1,0], [1,1], [2,1], [1,2] ],
+            [ [0,1], [1,1], [2,1], [1,2] ],
+            [ [1,0], [0,1], [1,1], [1,2] ]
+          ],
+          color: "purple"
+        },
+        {
+          name: "Z",
+          rotations: [
+            [ [0,1], [1,1], [1,2], [2,2] ],
+            [ [2,0], [1,1], [2,1], [1,2] ],
+            [ [0,1], [1,1], [1,2], [2,2] ],
+            [ [2,0], [1,1], [2,1], [1,2] ]
+          ],
+          color: "red"
+        }
+      ];
+
+      // Active piece and next pieces queue (for previews)
+      let activePiece;
+      let nextPieces = [randomPiece(), randomPiece()];
+      let gameOver = false;
+
+      const svg = document.getElementById("tetris");
+      const preview1 = document.getElementById("preview1");
+      const preview2 = document.getElementById("preview2");
+
+      // Returns a new random tetromino piece object
+      function randomPiece() {
+        const index = Math.floor(Math.random() * tetrominoes.length);
+        const tetromino = tetrominoes[index];
+        return {
+          tetromino: tetromino,
+          rotationIndex: 0,
+          x: 3,
+          y: 0
+        };
+      }
+
+      // Spawn the next active piece from the queue and add a new random piece to the queue
+      function spawnPiece() {
+        let piece = nextPieces.shift();
+        piece.x = 3;
+        piece.y = 0;
+        piece.rotationIndex = 0;
+        nextPieces.push(randomPiece());
+        if (!isValidMove(piece, piece.x, piece.y, piece.rotationIndex)) {
+          gameOver = true;
+        }
+        return piece;
+      }
+
+      activePiece = spawnPiece();
+
+      // Checks whether a move is valid (no collisions with board edges or fixed blocks)
+      function isValidMove(piece, newX, newY, newRotation) {
+        const shape = piece.tetromino.rotations[newRotation % piece.tetromino.rotations.length];
+        for (const block of shape) {
+          const x = newX + block[0];
+          const y = newY + block[1];
+          if (x < 0 || x >= cols || y >= rows) return false;
+          if (y >= 0 && board[y][x] !== null) return false;
+        }
+        return true;
+      }
+
+      // Merge the active piece into the board array
+      function mergePiece(piece) {
+        const shape = piece.tetromino.rotations[piece.rotationIndex % piece.tetromino.rotations.length];
+        for (const block of shape) {
+          const x = piece.x + block[0];
+          const y = piece.y + block[1];
+          if (y >= 0) {
+            board[y][x] = piece.tetromino.color;
+          }
+        }
+      }
+
+      // Clear any complete lines; for every 20 lines cleared overall, speed up the game
+      function clearLines() {
+        let linesClearedNow = 0;
+        for (let y = rows - 1; y >= 0; y--) {
+          if (board[y].every(cell => cell !== null)) {
+            board.splice(y, 1);
+            board.unshift(new Array(cols).fill(null));
+            linesClearedNow++;
+            y++; // recheck this line index
+          }
+        }
+        if (linesClearedNow > 0) {
+          linesClearedTotal += linesClearedNow;
+          const level = Math.floor(linesClearedTotal / 20);
+          dropSpeed = Math.max(100, 500 - level * 50);
+        }
+      }
+
+      // Draw the fixed blocks on the board and the active falling piece
+      function draw() {
+        svg.innerHTML = "";
+        // Draw board cells
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            if (board[y][x]) {
+              const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+              rect.setAttribute("x", x * cellSize);
+              rect.setAttribute("y", y * cellSize);
+              rect.setAttribute("width", cellSize);
+              rect.setAttribute("height", cellSize);
+              rect.setAttribute("fill", board[y][x]);
+              rect.setAttribute("stroke", "#222");
+              svg.appendChild(rect);
+            }
+          }
+        }
+        // Draw the active piece
+        const shape = activePiece.tetromino.rotations[activePiece.rotationIndex % activePiece.tetromino.rotations.length];
+        for (const block of shape) {
+          const x = activePiece.x + block[0];
+          const y = activePiece.y + block[1];
+          if (y >= 0) {
+            const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+            rect.setAttribute("x", x * cellSize);
+            rect.setAttribute("y", y * cellSize);
+            rect.setAttribute("width", cellSize);
+            rect.setAttribute("height", cellSize);
+            rect.setAttribute("fill", activePiece.tetromino.color);
+            rect.setAttribute("stroke", "#222");
+            svg.appendChild(rect);
+          }
+        }
+        updatePreviews();
+      }
+
+      // Draw a preview of a piece (using its default rotation) inside a small SVG
+      function drawPreview(previewSvg, piece) {
+        const previewCell = 20;  // preview cell size
+        const offset = 20;       // to center a 4x4 grid in a 120x120 SVG
+        previewSvg.innerHTML = "";
+        const shape = piece.tetromino.rotations[0];
+        for (const block of shape) {
+          const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          rect.setAttribute("x", offset + block[0] * previewCell);
+          rect.setAttribute("y", offset + block[1] * previewCell);
+          rect.setAttribute("width", previewCell);
+          rect.setAttribute("height", previewCell);
+          rect.setAttribute("fill", piece.tetromino.color);
+          rect.setAttribute("stroke", "#222");
+          previewSvg.appendChild(rect);
+        }
+      }
+
+      // Update the two next-piece previews
+      function updatePreviews() {
+        drawPreview(preview1, nextPieces[0]);
+        drawPreview(preview2, nextPieces[1]);
+      }
+
+      // Main game logic: move the active piece down or merge it if it can't move further
+      function gameLoop() {
+        if (isValidMove(activePiece, activePiece.x, activePiece.y + 1, activePiece.rotationIndex)) {
+          activePiece.y++;
+        } else {
+          mergePiece(activePiece);
+          clearLines();
+          activePiece = spawnPiece();
+          if (gameOver) {
+            alert("Game Over!");
+            return;
+          }
+        }
+        draw();
+      }
+
+      // Instead of setInterval, use a recursive setTimeout so we can change dropSpeed dynamically.
+      function runGameLoop() {
+        if (gameOver) return;
+        gameLoop();
+        setTimeout(runGameLoop, dropSpeed);
+      }
+
+      // Listen for key presses to control the active piece.
+      document.addEventListener("keydown", e => {
+        if (gameOver) return;
+        if (e.key === "ArrowLeft") {
+          if (isValidMove(activePiece, activePiece.x - 1, activePiece.y, activePiece.rotationIndex)) {
+            activePiece.x--;
+          }
+        } else if (e.key === "ArrowRight") {
+          if (isValidMove(activePiece, activePiece.x + 1, activePiece.y, activePiece.rotationIndex)) {
+            activePiece.x++;
+          }
+        } else if (e.key === "ArrowDown") {
+          if (isValidMove(activePiece, activePiece.x, activePiece.y + 1, activePiece.rotationIndex)) {
+            activePiece.y++;
+          }
+        } else if (e.key === "ArrowUp") {
+          const newRotation = activePiece.rotationIndex + 1;
+          if (isValidMove(activePiece, activePiece.x, activePiece.y, newRotation)) {
+            activePiece.rotationIndex = newRotation;
+          }
+        } else if (e.key === " ") {
+          // Hard drop: move the piece down until it collides.
+          while (isValidMove(activePiece, activePiece.x, activePiece.y + 1, activePiece.rotationIndex)) {
+            activePiece.y++;
+          }
+        }
+        draw();
+      });
+
+      // 8-Bit Style Music (a simple repeating chiptune melody via the Web Audio API)
+      let musicStarted = false;
+      function playMusic() {
+        if (musicStarted) return;
+        musicStarted = true;
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // A simple melody (an array of note frequencies and durations)
+        const notes = [
+          {freq: 440, duration: 0.3},
+          {freq: 494, duration: 0.3},
+          {freq: 523, duration: 0.3},
+          {freq: 440, duration: 0.3},
+          {freq: 392, duration: 0.3},
+          {freq: 349, duration: 0.3},
+          {freq: 330, duration: 0.3},
+          {freq: 392, duration: 0.3}
+        ];
+        function scheduleNotes() {
+          let time = audioCtx.currentTime;
+          for (let i = 0; i < notes.length; i++) {
+            const note = notes[i];
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            osc.frequency.value = note.freq;
+            gainNode.gain.setValueAtTime(0.2, time);
+            osc.start(time);
+            osc.stop(time + note.duration);
+            time += note.duration;
+          }
+          // Loop the melody
+          setTimeout(scheduleNotes, (time - audioCtx.currentTime) * 1000);
+        }
+        scheduleNotes();
+      }
+
+      // Initial draw and start the game loop.
+      draw();
+      runGameLoop();
+
+      // Start music on the first click (some browsers require a user interaction to start audio).
+      document.body.addEventListener('click', playMusic, {once: true});
+    })();
+  </script>
+</body>
+</html>
