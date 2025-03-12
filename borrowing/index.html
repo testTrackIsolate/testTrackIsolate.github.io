@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chewy&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Story Page</title>
+    <style>
+        .chewy-regular {
+  font-family: "Chewy", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+        * {
+            user-select: none;
+        }
+        html.no-scroll, body.no-scroll {
+            overflow: hidden !important;
+            height: 100%;
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            font-family: Chewy, sans-serif;
+            background: white;
+            color: black;
+        }
+        img{max-height:300px;float:right}
+        .section {
+            position: relative;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .parallax-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-attachment: fixed;
+            z-index: -1;
+            background-color: transparent; /* default transparent */
+        }
+
+        .text-line {
+            opacity: 0;
+            transition: opacity 1s ease;
+            margin-bottom: 20px;
+            font-size: 3em;
+            max-width: 900px;
+            text-align: left;
+        }
+        .video-container, .interaction {
+            opacity: 0;
+            transition: opacity 1s ease, transform 1s ease;
+            transform: translateY(50px);
+        }
+        button.scroll-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 2.5em;
+            background-color: white;
+            font-family: Chewy, sans-serif;
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 4s;
+            filter:drop-shadow(5px 5px);
+        }
+        .image-choice img {
+            width: 150px;
+            cursor: pointer;
+            margin: 10px;
+            border: 3px solid transparent;
+            transition: border 0.3s ease;
+        }
+        .image-choice img:hover {
+            border-color: yellow;
+        }
+        .portentuous{
+            color:orange;
+        }
+        .happy{
+            color:deepskyblue;
+        }
+        /*animations*/
+        .fade-in-delayed {
+    opacity: 0 !important; /* Ensure fully hidden */
+    transition: opacity 1s ease, transform 1s ease;
+    transform: translateY(20px); /* Start slightly offset */
+    --fade-delay: 500ms; /* Default delay */
+}
+
+.fade-in-delayed.visible {
+    opacity: 1 !important; /* Ensures visibility is controlled */
+    transform: translateY(0);
+    transition-delay: var(--fade-delay);
+}
+
+
+
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        /*video*/
+        .video-container {
+            width: 100%;
+            max-width: 800px; /* set your desired width */
+            aspect-ratio: 14 / 9; /* Match your video's original aspect ratio */
+            overflow: hidden;
+            position: relative;
+        }
+
+        .frameless-video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Crop and fill container */
+            transform: translate(-50%, -50%);
+        }
+        /*questions*/
+        /* Background image stays fixed */
+        .fixed-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+
+/* Question container (scrolls) */
+.question-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Individual question */
+.question {
+    opacity: 0;
+    display:none;
+    transform: translateY(50px);
+    transition: opacity 1s ease, transform 1s ease;
+    text-align: center;
+    font-size: 2em;
+}
+
+/* Make active question visible */
+.question.active {
+    opacity: 1;
+    display:block;
+    transform: translateY(0);
+}
+
+/* Buttons */
+.answer-btn {
+    font-family: chewy, sans-serif;
+    color:darkviolet;
+    margin: 10px;
+    padding: 10px 20px;
+    font-size: 1.5em;
+    cursor: pointer;
+    background: white;
+    border: none;
+    border-radius: 5px;
+    border-bottom-left-radius: 0px;
+    filter:drop-shadow(3px 3px 3px);
+    transition: background 0.3s;
+}
+
+.answer-btn:hover {
+    background: lightgray;
+}
+
+
+    </style>
+</head>
+<body>
+    <!-- Section 1: Introductory Text -->
+    <div class="section" id="section1">
+        <div class="parallax-bg" style="background-image: url('bg1.jpg');"></div>
+        <div class="text-line">Have you ever had one of those days?<br/>You slept in. You left half the things you needed at home.<br/><br/>It happens to everyone.<br/><br/><div class="fade-in-delayed portentuous" style="--fade-delay: 1000ms;">It happened to me...<img id="pyjamas" src="pyjamas.png"/></div></div>
+        <button id="first-continue" class="scroll-btn fade-in-delayed" style="--fade-delay: 1500ms;">go on...</button><!--special case because the first click is caught by a global handler-->
+    </div>
+
+    <!-- Section 2: Video Section -->
+    <div class="section" id="section2">
+    <div class="parallax-bg"></div>
+    <div class="video-container">
+    <video class="frameless-video" playsinline>
+        <source src="teacher.mp4" type="video/mp4">
+        </video>
+    </div>
+    <br/>
+    <div class="text-line">Mr Andrews is <b>not</b> my favourite teacher.</div>
+    <button class="scroll-btn fade-in-delayed" style="--fade-delay: 3500ms;" onclick="scrollToSection('section3')">next</button>
+</div>
+
+    <!-- Section 3: More Text -->
+    <div class="section" id="section3">
+        <div class="parallax-bg" style="background-image: url('bg3.jpg');"></div>
+        <div class="text-line" style="font-size:5em;">Can you guess what my problem was?</div>
+        <button class="scroll-btn fade-in-delayed" style="--fade-delay: 1500ms;" onclick="scrollToSection('section4')">maybe...</button>
+    </div>
+
+    <!-- Section 4: Another Video -->
+    <div class="section" id="section4">
+    <div class="parallax-bg"></div>
+    <div class="video-container">
+    <video class="frameless-video" playsinline>
+        <source src="boy.mp4" type="video/mp4">
+        </video>
+    </div>
+    <button class="scroll-btn fade-in-delayed" style="--fade-delay: 2500ms;" onclick="scrollToSection('section5')">Ah well.</button>
+</div>
+    <!-- Section 5: More Text -->
+    <div class="section" id="section5">
+        <div class="parallax-bg" style="background-image: url('bg3.jpg');"></div>
+        <div class="text-line">You don't understand. <br/><br/>Mr Andrews is <i>strict</i>.<br/>Very strict.<br/><br/>It looked like I was in trouble.<img id="angry" src="angry1.png"/></div>
+        <button class="scroll-btn fade-in-delayed" style="--fade-delay: 1000ms;" onclick="changeImageAndScroll('angry','angry2.png', 'section6')">Yikes!</button>
+    </div>
+
+
+
+    <!-- Section 6: More Text -->
+    <div class="section" id="section6">
+        <div class="parallax-bg" style="background-image: url('bg3.jpg');"></div>
+        <div class="text-line happy">Thank goodness for Kiran!<img id="kiran" src="silhouette.png"/></div>
+        <button class="scroll-btn fade-in-delayed" style="--fade-delay: 500ms;" onclick="changeImageAndScroll('kiran','girl.png', 'section7')">?</button>
+    </div>
+
+    <div class="section" id="section7">
+    <div class="parallax-bg"></div>
+    <div class="video-container">
+    <video class="frameless-video" playsinline>
+        <source src="girl.mp4" type="video/mp4">
+        </video>
+    </div>
+    <button class="scroll-btn fade-in-delayed" style="--fade-delay: 1500ms;" onclick="scrollToSection('section8')">Phew!</button>
+</div>
+    <!-- Section 8: Background stays, questions scroll -->
+    <div class="section" id="section8">
+        <div class="fixed-bg" style="background-image: url('silhouette.png');"></div>
+        <div class="question-container">
+
+            <!-- First question -->
+            <div class="question active" id="question1">
+                <div class="text-line">If you borrow something...</div>
+                <button class="answer-btn" onclick="nextQuestion(1, true)">You can keep it</button>
+                <button class="answer-btn" onclick="nextQuestion(1, false)">You have to give it back</button>
+                <img src="archie.png" class="marginal-left" style="float:left"/>
+            </div>
+
+            <!-- Second question (hidden initially) -->
+            <div class="question" id="question2">
+                <div class="text-line">Does Kiran want this piece of paper back?</div>
+                <button class="answer-btn" onclick="nextQuestion(2, true)">Yes, of course!</button>
+                <button class="answer-btn" onclick="nextQuestion(2, false)">No, I don't think so.</button>
+                <img src="kiran.png" class="marginal-right" style="float:right"/>
+            </div>
+
+            <!-- Third question (hidden initially) -->
+            <div class="question" id="question3">
+                <div class="text-line">What does Kiran want?</div>
+                <button class="answer-btn" onclick="nextQuestion(3, true)">A new piece of paper</button>
+                <button class="answer-btn" onclick="nextQuestion(3, false)">Nothing</button>
+            </div>
+        </div>
+    </div>
+    <!-- Section 9: More Text -->
+    <div class="section" id="section9">
+        <div class="parallax-bg" style="background-image: url('bg3.jpg');"></div>
+        <div class="text-line">Today, I borrowed a piece of paper from Kiran. Next time she needs a piece of paper, I will give her one from my notepad.<br/><br/>That seems fair. She helped me today, and I will help her another day.</div>
+    </div>
+
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    window.scrollTo(0, 0);
+    document.documentElement.classList.add('no-scroll');
+    document.body.classList.add('no-scroll');
+
+    let userInteracted = false;
+    const firstContinueBtn = document.getElementById('first-continue');
+
+    firstContinueBtn.addEventListener('click', () => {
+        userInteracted = true;
+        document.documentElement.classList.remove('no-scroll');
+        document.body.classList.remove('no-scroll');
+        scrollToSection('section2');
+    }, { once: true });
+
+    // Make sure all fade-in-delayed elements are initially hidden
+    const delayedElements = document.querySelectorAll('.fade-in-delayed');
+    delayedElements.forEach(el => {
+        el.classList.remove('visible'); // Remove any pre-loaded visibility
+        el.style.opacity = "0";  // Force it hidden in case CSS didn't apply correctly
+    });
+
+    // Intersection Observer to trigger fade-in at the right moment
+    const fadeObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                    entry.target.style.opacity = "1"; // Force fade-in
+                }, parseInt(entry.target.style.getPropertyValue('--fade-delay')) || 500);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 }); // 30% of element must be visible
+
+    delayedElements.forEach(el => fadeObserver.observe(el));
+
+    // Observer for other animations (videos, interactions, etc.)
+    const animatedElements = document.querySelectorAll('.video-container, .interaction, .text-line');
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    animatedElements.forEach(el => observer.observe(el));
+
+    // Autoplay videos when in view
+    const videoObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            const video = entry.target;
+            if (entry.isIntersecting && userInteracted) {
+                video.play().catch(() => {
+                    console.log("User interaction required to play sound.");
+                });
+            } else {
+                video.pause();
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.frameless-video').forEach(video => {
+        videoObserver.observe(video);
+    });
+});
+
+// Scroll to specific section function
+function scrollToSection(sectionId) {
+    document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+}
+
+// Function to handle image change and scroll
+function changeImageAndScroll(imageId, newImageSrc, nextSectionId) {
+    const img = document.getElementById(imageId);
+    if (img) {
+        img.src = newImageSrc;
+    }
+    setTimeout(() => scrollToSection(nextSectionId), 500);
+}
+
+// Simple choice interaction
+function handleChoice(imgElement, isCorrect) {
+    alert(isCorrect ? 'Correct!' : 'Try again.');
+}
+
+// Reset scroll position on page unload
+window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+};
+//question transitions
+function nextQuestion(currentQuestionNumber, isCorrect) {
+    /*if (isCorrect) {
+        alert("Correct!");
+    } else {
+        alert("Try again!");
+    }
+    */
+    // Hide current question
+    const currentQuestion = document.getElementById(`question${currentQuestionNumber}`);
+    currentQuestion.classList.remove("active");
+
+    // Show next question (if exists)
+    const nextQuestion = document.getElementById(`question${currentQuestionNumber + 1}`);
+    if (nextQuestion) {
+        setTimeout(() => {
+            nextQuestion.classList.add("active");
+        }, 100); // Delay to make transition smooth
+    } else{
+        //progress to the next section
+        scrollToSection("section9");//HARD CODED!
+    }
+}
+
+
+    </script>
+</body>
+</html>
