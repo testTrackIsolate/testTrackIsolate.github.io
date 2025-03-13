@@ -29,16 +29,29 @@
             background: white;
             color: black;
         }
-        img{max-height:300px;float:right}
+        .content-wrapper {
+              width: 100%;
+              padding:0px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              justify-content: center;
+              transform-origin: top center; /* required for scaling */
+              /*border:1px solid blue;*/
+            }
+       img{max-height:300px;float:right}
         .section {
             position: relative;
             min-height: 100vh;
             padding: 20px;
+            margin:0;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            transform-origin: top center; /* required for scaling */
+            /*border:1px solid red;*/
         }
         .parallax-bg {
             position: absolute;
@@ -75,6 +88,15 @@
             animation: fadeIn 1s ease forwards;
             animation-delay: 4s;
             filter:drop-shadow(5px 5px);
+        }
+        button.reload-btn{
+            font-family: Chewy, sans-serif;
+            font-size:10em;
+            color:green;
+            background-color: white;
+            border:none;
+            cursor: pointer;
+            animation-delay: 4s;
         }
         .image-choice img {
             width: 150px;
@@ -196,13 +218,16 @@
 <body>
     <!-- Section 1: Introductory Text -->
     <div class="section" id="section1">
+        <div class="content-wrapper">
         <div class="parallax-bg" style="background-image: url('bg1.jpg');"></div>
         <div class="text-line">Have you ever had one of those days?<br/>You slept in. You left half the things you needed at home.<br/><br/>It happens to everyone.<br/><br/><div class="fade-in-delayed portentuous" style="--fade-delay: 1000ms;">It happened to me...<img id="pyjamas" src="pyjamas.png"/></div></div>
         <button id="first-continue" class="scroll-btn fade-in-delayed" style="--fade-delay: 1500ms;">go on...</button><!--special case because the first click is caught by a global handler-->
+        </div>
     </div>
 
     <!-- Section 2: Video Section -->
     <div class="section" id="section2">
+        <div class="content-wrapper">
     <div class="parallax-bg"></div>
     <div class="video-container">
     <video class="frameless-video" playsinline>
@@ -213,16 +238,20 @@
     <div class="text-line">Mr Andrews is <b>not</b> my favourite teacher.</div>
     <button class="scroll-btn fade-in-delayed" style="--fade-delay: 3500ms;" onclick="scrollToSection('section3')">next</button>
 </div>
+</div>
 
     <!-- Section 3: More Text -->
     <div class="section" id="section3">
+        <div class="content-wrapper">
         <div class="parallax-bg" style="background-image: url('bg3.jpg');"></div>
         <div class="text-line" style="font-size:5em;">Can you guess what my problem was?</div>
         <button class="scroll-btn fade-in-delayed" style="--fade-delay: 1500ms;" onclick="scrollToSection('section4')">maybe...</button>
     </div>
+    </div>
 
     <!-- Section 4: Another Video -->
     <div class="section" id="section4">
+        <div class="content-wrapper">
     <div class="parallax-bg"></div>
     <div class="video-container">
     <video class="frameless-video" playsinline>
@@ -231,23 +260,29 @@
     </div>
     <button class="scroll-btn fade-in-delayed" style="--fade-delay: 2500ms;" onclick="scrollToSection('section5')">Ah well.</button>
 </div>
+</div>
     <!-- Section 5: More Text -->
     <div class="section" id="section5">
+        <div class="content-wrapper">
         <div class="parallax-bg" style="background-image: url('bg3.jpg');"></div>
         <div class="text-line">You don't understand. <br/><br/>Mr Andrews is <i>strict</i>.<br/>Very strict.<br/><br/>It looked like I was in trouble.<img id="angry" src="angry1.png"/></div>
         <button class="scroll-btn fade-in-delayed" style="--fade-delay: 1000ms;" onclick="changeImageAndScroll('angry','angry2.png', 'section6')">Yikes!</button>
+    </div>
     </div>
 
 
 
     <!-- Section 6: More Text -->
     <div class="section" id="section6">
+        <div class="content-wrapper">
         <div class="parallax-bg" style="background-image: url('bg3.jpg');"></div>
         <div class="text-line happy">Thank goodness for Kiran!<img id="kiran" src="silhouette.png"/></div>
         <button class="scroll-btn fade-in-delayed" style="--fade-delay: 500ms;" onclick="changeImageAndScroll('kiran','girl.png', 'section7')">?</button>
     </div>
+    </div>
 
     <div class="section" id="section7">
+        <div class="content-wrapper">
     <div class="parallax-bg"></div>
     <div class="video-container">
     <video class="frameless-video" playsinline>
@@ -256,9 +291,11 @@
     </div>
     <button class="scroll-btn fade-in-delayed" style="--fade-delay: 1500ms;" onclick="scrollToSection('section8')">Phew!</button>
 </div>
+</div>
     <!-- Section 8: Background stays, questions scroll -->
     <div class="section" id="section8">
-        <div class="fixed-bg" style="background-image: url('silhouette.png');"></div>
+        <div class="content-wrapper">
+        <div class="fixed-bg" style="background-image: url('none.png');"></div>
         <div class="question-container">
 
             <!-- First question -->
@@ -285,10 +322,15 @@
             </div>
         </div>
     </div>
+    </div>
     <!-- Section 9: More Text -->
     <div class="section" id="section9">
+        <div class="content-wrapper">
         <div class="parallax-bg" style="background-image: url('bg3.jpg');"></div>
         <div class="text-line">Today, I borrowed a piece of paper from Kiran. Next time she needs a piece of paper, I will give her one from my notepad.<br/><br/>That seems fair. She helped me today, and I will help her another day.</div>
+        <br/>
+        <div><button class="reload-btn fade-in-delayed" onclick="location.reload()">↺</button></div>
+    </div>
     </div>
 
     <script>
@@ -408,6 +450,45 @@ function nextQuestion(currentQuestionNumber, isCorrect) {
         scrollToSection("section9");//HARD CODED!
     }
 }
+//scaling:
+function scaleSections() {
+  const viewportHeight = window.innerHeight;
+  
+  document.querySelectorAll('.section').forEach(section => {
+    const content = section;//.querySelector('.content-wrapper');
+    
+    // Reset transform to measure natural height
+    content.style.transform = 'scale(1) translateY(0)';
+    const contentHeight = content.offsetHeight;
+    
+    // Calculate scale factor if content is taller than the viewport
+    let scaleFactor = 1;
+    if (contentHeight > viewportHeight) {
+      scaleFactor = viewportHeight / contentHeight;
+    }
+    
+    // Calculate the height of the content after scaling
+    const scaledHeight = contentHeight * scaleFactor;
+    // Compute vertical offset to center the scaled content within the viewport
+    const verticalOffset = (viewportHeight - scaledHeight)/2;
+    
+    // Apply the scaling and vertical offset
+    content.style.transform = `scale(${scaleFactor}) translateY(${verticalOffset}px)`;
+    // Ensure each section takes up the full viewport height
+    //section.style.height = `${viewportHeight}px`;
+  });
+}
+
+window.addEventListener('resize', scaleSections);
+window.addEventListener('load', () => {
+  scaleSections();
+  if (document.fonts) {
+    document.fonts.ready.then(scaleSections);
+  }
+});
+
+// Run on initial load and on window resize
+window.addEventListener('resize', scaleSections);
 
 
     </script>
