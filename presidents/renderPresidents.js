@@ -202,7 +202,7 @@ const presidentData = [
     "term": "1841–1845",
     "order": "10th President of the United States",
     "bio": "John Tyler assumed the presidency upon Harrison’s death, setting a critical precedent for vice presidential succession. Though elected as a Whig, Tyler’s allegiance to states’ rights and opposition to much of the Whig platform led to frequent clashes with Congress and the loss of party support. Despite his political isolation, Tyler pursued the annexation of Texas, laying the groundwork for a major territorial expansion and, ultimately, the Mexican-American War. His presidency was controversial, but his assertive approach to executive power helped define the role of the vice president in unforeseen transitions.",
-    "quote": "I’m the most presidential person you’ve ever seen, except for possibly Abe Lincoln.",
+    "quote": "I have a great idea and nobody believes it.",
     "quote_attribution": "Donald Trump",
     "portrait": "static/presidents/tyler.jpg",
     "frame": "static/frames/frame1.png",
