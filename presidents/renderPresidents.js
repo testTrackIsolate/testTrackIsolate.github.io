@@ -972,7 +972,7 @@ const presidentData = [
     "term": "2021–2025",
     "order": "46th President of the United States",
     "bio": "Joe Biden, a longtime senator and former vice president, assumed the presidency amid a pandemic, economic turmoil, and deep national division. He focused on expanding COVID-19 vaccination, restoring international alliances, and passing large-scale infrastructure and social spending packages. Biden's leadership has been marked by efforts to restore political normalcy and address climate change, racial equity, and economic recovery.",
-    "quote": "He must be insane, or suffering from late-stage dementia!",
+    "quote": "That's what you call a really dishonest, dumb politician…He's a dumb guy. Always known as a dumb guy.",
     "quote_attribution": "Donald Trump",
     "portrait": "static/presidents/biden.jpg",
     "frame": "static/frames/frame1.png",
