@@ -950,7 +950,7 @@ const presidentData = [
     "term": "2017–2021",
     "order": "45th, 47th amd last President of the United States",
     "bio": "Donald Trump, a real estate mogul and reality television star, defied political convention to win the presidency in 2016. His administration focused on immigration restrictions, tax cuts, and deregulation, while pursuing an 'America First' foreign policy. Trump was impeached twice and left office after the Capitol riot on January 6, 2021, which led to widespread condemnation. A divisive and influential figure, his presidency left a lasting mark on American political discourse and institutions.",
-    "quote": "I was the best president in the history of our country. Better than Lincoln, better than Washington.",
+    "quote": "If George Washington and Abraham Lincoln got together and ran as President and Vice-President, they couldn't beat me.",
     "quote_attribution": "Donald Trump",
     "portrait": "static/presidents/trump.webp",
     "frame": "static/frames/frame1.png",
